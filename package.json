@@ -1,0 +1,30 @@
+{
+  "name": "product-overview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpp28-sdc-blackberry/product-overview.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rpp28-sdc-blackberry/product-overview/issues"
+  },
+  "homepage": "https://github.com/rpp28-sdc-blackberry/product-overview#readme",
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.30.0",
+    "eslint-plugin-react": "^7.24.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.9"
+  }
+}
