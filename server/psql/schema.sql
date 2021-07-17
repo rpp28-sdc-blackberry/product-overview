@@ -16,41 +16,61 @@ CREATE TABLE products (
 
 CREATE TABLE features (
   id             INT       NOT NULL   PRIMARY KEY,
-  product_id     INT       NOT NULL   REFERENCES products(id),
+  product_id     INT       NOT NULL   REFERENCES products(id)  DEFERRABLE INITIALLY IMMEDIATE,
   feature        VARCHAR   NOT NULL,
-  VALUE          VARCHAR   NOT NULL
+  value          VARCHAR   NOT NULL
 );
 
 CREATE TABLE related_products (
   id                    INT       NOT NULL   PRIMARY KEY,
-  root_product_id       INT       NOT NULL   REFERENCES products(id),
-  related_product_id    INT       NOT NULL   REFERENCES products(id)
+  current_product_id    INT       NOT NULL   REFERENCES products(id)  DEFERRABLE INITIALLY IMMEDIATE,
+  related_product_id    INT       NOT NULL
 );
 
 CREATE TABLE styles (
   id              INT       NOT NULL   PRIMARY KEY,
-  product_id      INT       NOT NULL   REFERENCES products(id),
+  product_id      INT       NOT NULL   REFERENCES products(id)  DEFERRABLE INITIALLY IMMEDIATE,
   name            VARCHAR   NOT NULL,
-  original_price  VARCHAR   NOT NULL,
   sale_price      VARCHAR   NOT NULL,
-  place_holder    BOOLEAN   NOT NULL
+  original_price  VARCHAR   NOT NULL,
+  default_style   BOOLEAN   NOT NULL
 );
 
 CREATE TABLE photos (
   id              INT       NOT NULL   PRIMARY KEY,
-  style_id        INT       NOT NULL   REFERENCES styles(id),
-  thumbnail_url   VARCHAR   NOT NULL,
-  url             VARCHAR   NOT NULL
+  style_id        INT       NOT NULL   REFERENCES styles(id)   DEFERRABLE INITIALLY IMMEDIATE,
+  url             VARCHAR   NOT NULL,
+  thumbnail_url   VARCHAR   NOT NULL
 );
 
 CREATE TABLE skus (
   id          INT       NOT NULL   PRIMARY KEY,
-  style_id    INT       NOT NULL   REFERENCES styles(id),
-  sku         VARCHAR   NOT NULL,
-  quantity    INT       NOT NULL,
-  size        VARCHAR   NOT NULL
+  style_id    INT       NOT NULL   REFERENCES styles(id)  DEFERRABLE INITIALLY IMMEDIATE,
+  size        VARCHAR   NOT NULL,
+  quantity    INT       NOT NULL
 );
 
-
-
-
+DO
+$$
+DECLARE
+  record        RECORD;
+  table_copy    TEXT;
+  current_path  TEXT;
+BEGIN
+  SET CONSTRAINTS ALL DEFERRED;
+  FOR record IN SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = 'public'
+  LOOP
+    table_copy := record.table_name || '_copy';
+    RAISE NOTICE 'currently transferring: %', table_copy;
+    EXECUTE FORMAT('DROP TABLE IF EXISTS %I', table_copy);
+    EXECUTE FORMAT('CREATE TABLE %I AS TABLE %I WITH NO DATA', table_copy, record.table_name);
+    EXECUTE FORMAT('COPY %I FROM ''/Users/tchitrakorn/Documents/HackReactor/sdc/data/%I.csv'' DELIMITER '','' CSV HEADER', table_copy, record.table_name);
+    EXECUTE FORMAT('INSERT INTO %I SELECT * FROM %I', record.table_name, table_copy, table_copy);
+    EXECUTE FORMAT('DROP TABLE %I', table_copy);
+    RAISE NOTICE 'completed transferring for: %', table_copy;
+  END LOOP;
+  COMMIT;
+END;
+$$
