@@ -55,7 +55,6 @@ $$
 DECLARE
   record        RECORD;
   table_copy    TEXT;
-  current_path  TEXT;
 BEGIN
   SET CONSTRAINTS ALL DEFERRED;
   FOR record IN SELECT table_name
