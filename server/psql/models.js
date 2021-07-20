@@ -35,10 +35,7 @@ module.exports = {
       db.client.query(queryString2, values),
       db.client.query(queryString3, values)])
       .then(results => {
-        let styles = results[0].rows;
-        let photos = results[1].rows;
-        let skus = results[2].rows;
-        let temp = {};
+        let [ styles, photos, skus, temp ] = [ results[0].rows, results[1].rows, results[2].rows, {} ];
         photos.forEach(photo => {
           let modifiedPhoto = { 'thumbnail_url': photo.thumbnail_url, 'url': photo.url };
           if (temp[photo.style_id] === undefined) {
