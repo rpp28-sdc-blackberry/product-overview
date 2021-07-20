@@ -1,11 +1,16 @@
 require('dotenv').config();
 const express = require('express');
+const db = require('./psql/models.js');
 const app = express();
 app.use(express.json());
 
 app.get('/products', (req, res) => {
-  // TODO
-  res.send();
+  let { page, count } = req.query;
+  page = page || 1;
+  count = count || 5;
+  db.getAllProducts(page, count)
+    .then(results => res.send(results))
+    .catch(error => res.send(error));
 });
 
 app.get('/products/:product_id', (req, res) => {
