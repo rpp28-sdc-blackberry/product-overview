@@ -11,11 +11,18 @@ module.exports = {
       .catch(error => error);
   },
   getProductById: (productId) => {
-    let queryString = 'SELECT * FROM products WHERE id = $1';
+    let queryString1 = 'SELECT * FROM products WHERE id = $1';
+    let queryString2 = 'SELECT feature, value FROM features WHERE product_id = $1';
     let values = [productId];
-    return db.client
-      .query(queryString, values)
-      .then(results => console.log('results: ', results))
-      .catch(error => console.log('error: ', error));
+    return Promise.all([
+      db.client.query(queryString1, values),
+      db.client.query(queryString2, values)])
+      .then(results => {
+        let productInfo = results[0].rows[0];
+        let productFeatures = results[1].rows;
+        productInfo.features = productFeatures;
+        return productInfo;
+      })
+      .catch(error => error);
   }
 };
