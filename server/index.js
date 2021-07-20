@@ -22,8 +22,9 @@ app.get('/products/:product_id', (req, res) => {
 
 app.get('/products/:product_id/styles', (req, res) => {
   let productId = req.params.product_id;
-  // TODO
-  res.send();
+  db.getProductStyleById(productId)
+    .then(results => res.send(results))
+    .catch(error => res.send(error));
 });
 
 app.get('/products/:product_id/related', (req, res) => {
