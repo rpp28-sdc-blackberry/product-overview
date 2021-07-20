@@ -66,5 +66,13 @@ module.exports = {
         return { 'product_id': productId, 'results': styles };
       })
       .catch(error => error);
+  },
+  getRelatedProducts: (productId) => {
+    let queryString = 'SELECT * FROM related_products WHERE current_product_id = $1';
+    let values = [productId];
+    return db.client
+      .query(queryString, values)
+      .then(results => results.rows.map(relation => relation.related_product_id))
+      .catch(error => error);
   }
 };

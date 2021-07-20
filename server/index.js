@@ -29,8 +29,9 @@ app.get('/products/:product_id/styles', (req, res) => {
 
 app.get('/products/:product_id/related', (req, res) => {
   let productId = req.params.product_id;
-  // TODO
-  res.send();
+  db.getRelatedProducts(productId)
+    .then(results => res.send(results))
+    .catch(error => res.send(error));
 });
 
 app.listen(process.env.SVPORT, () => {
