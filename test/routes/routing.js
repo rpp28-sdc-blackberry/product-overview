@@ -2,7 +2,7 @@ require('dotenv').config();
 const frisby = require('frisby');
 const baseURL = `http://localhost:${process.env.SVPORT}`;
 
-xdescribe('/products endpoint', () => {
+describe('/products endpoint', () => {
   it('should return a status of 200', function () {
     return frisby
       .get(`${baseURL}/products`)
@@ -61,17 +61,19 @@ describe('/products/:product_id endpoint', () => {
   });
 });
 
-xdescribe('/products/:product_id/styles endpoint', () => {
+describe('/products/:product_id/styles endpoint', () => {
   it('should return a status of 200', function () {
     return frisby
+      .timeout(30000)
       .get(`${baseURL}/products/2/styles`)
       .expect('status', 200);
   });
 });
 
-xdescribe('/products/:product_id/related endpoint', () => {
+describe('/products/:product_id/related endpoint', () => {
   it('should return a status of 200', function () {
     return frisby
+      .timeout(30000)
       .get(`${baseURL}/products/3/related`)
       .expect('status', 200);
   });
