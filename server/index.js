@@ -9,29 +9,29 @@ app.get('/products', (req, res) => {
   page = page || 1;
   count = count || 5;
   db.getAllProducts(page, count)
-    .then(results => res.send(results))
-    .catch(error => res.send(error));
+    .then(results => res.status(200).send(results))
+    .catch(error => res.status(500).send(error));
 });
 
 app.get('/products/:product_id', (req, res) => {
   let productId = req.params.product_id;
   db.getProductById(productId)
-    .then(results => res.send(results))
-    .catch(error => res.send(error));
+    .then(results => res.status(200).send(results))
+    .catch(error => res.status(500).send(error));
 });
 
 app.get('/products/:product_id/styles', (req, res) => {
   let productId = req.params.product_id;
   db.getProductStyleById(productId)
-    .then(results => res.send(results))
-    .catch(error => res.send(error));
+    .then(results => res.status(200).send(results))
+    .catch(error => res.status(500).send(error));
 });
 
 app.get('/products/:product_id/related', (req, res) => {
   let productId = req.params.product_id;
   db.getRelatedProducts(productId)
-    .then(results => res.send(results))
-    .catch(error => res.send(error));
+    .then(results => res.status(200).send(results))
+    .catch(error => res.status(500).send(error));
 });
 
 app.listen(process.env.SVPORT, () => {
