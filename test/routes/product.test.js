@@ -3,11 +3,17 @@ const frisby = require('frisby');
 const baseURL = `http://localhost:${process.env.SVPORT}`;
 
 describe('/products/:product_id endpoint', () => {
-  it('should return a status of 200', () => {
+  it('should return a status of 200 for a valid product id', () => {
     return frisby
       .timeout(30000)
       .get(`${baseURL}/products/1`)
       .expect('status', 200);
+  });
+  it('should return a status of 500 for an invalid product id', () => {
+    return frisby
+      .timeout(30000)
+      .get(`${baseURL}/products/-1`)
+      .expect('status', 500);
   });
   it('should return the correct product id', () => {
     return frisby
