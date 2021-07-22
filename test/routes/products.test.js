@@ -41,7 +41,7 @@ describe('/products endpoint', () => {
         expect(res.json.length).toBe(10);
       });
   });
-  it('should handle page and count parameters concurrently', () => {
+  xit('should handle page and count parameters concurrently', () => {
     return frisby
       .timeout(30000)
       .get(`${baseURL}/products?page=3&count=15`)
