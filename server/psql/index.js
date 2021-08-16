@@ -1,7 +1,12 @@
 const { Client } = require('pg');
+const cred = require('../../config.js');
 
-const client = new Client({
-  database: 'product_overview',
+// const client = new Client({
+//   database: 'product_overview',
+// });
+
+const client = new Client ({
+  connectionString: cred.credentials
 });
 
 client
