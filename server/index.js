@@ -34,6 +34,10 @@ app.get('/products/:product_id/related', (req, res) => {
     .catch(error => res.send(error));
 });
 
+app.get('/loaderio-3c86c143a41f84026cbc715440b64087', (req, res) => {
+  res.send('loaderio-3c86c143a41f84026cbc715440b64087');
+});
+
 app.listen(process.env.SVPORT, () => {
   console.log(`Listening at http://localhost:${process.env.SVPORT}`);
 });
